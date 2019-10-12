@@ -70,8 +70,8 @@ const myHandleSubmit = (values, { setStatus }) => {
     .catch(err => console.log(err));
 };
 const yupSchema = Yup.object().shape({
-  name: Yup.string().required("please type a species"),
-  email: Yup.string().required("please type a size")
+  name: Yup.string().required("please type a name"),
+  email: Yup.string().required("please type a email")
 });
 
 const formikObj = {
