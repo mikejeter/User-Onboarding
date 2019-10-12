@@ -1,13 +1,11 @@
 import React from 'react';
-
-
+import EnhancedUserForm from "./components/Form"
+ 
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        
-      </header>
+      <EnhancedUserForm />
     </div>
   );
 }

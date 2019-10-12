@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { withFormik, Form, Field } from "formik";
+import {withFormik, Form, Field } from "formik";
+import * as Yup from "yup";
+import axios from "axios";
 
 const UserForm = props => {
     const [users, setUsers] = useState([]);
@@ -37,12 +39,48 @@ const UserForm = props => {
           <button type="submit">Submit!</button>
         </Form>
         {users.map(user => (
-        <ul key={user.id}>
-          <li>Name: {user.name}</li>
-          <li>Email: {user.email}</li>
-          <li>Password: {user.password}</li>
-        </ul>
-      ))}
+  <ul key={user.id}>
+    <li>Name: {user.name}</li>
+    <li>Email: {user.email}</li>
+    <li>Password: {user.password}</li>
+  </ul>
+))}
     </div>
   );
 };
+const myMapPropsToValues = props => {
+  console.log(props);
+  const returnObj = {
+    name: props.name || "",
+    email: props.email || "",
+    password: props.password || "",
+    tos: props.tos || true,
+  };
+  return returnObj;
+};
+
+const myHandleSubmit = (values, { setStatus }) => {
+  console.log("submit pressed! ... sending...");
+  axios
+    .post("https://reqres.in/api/users/", values)
+    .then(res => {
+      console.log(res);
+      setStatus(res.data);
+    })
+    .catch(err => console.log(err));
+};
+const yupSchema = Yup.object().shape({
+  name: Yup.string().required("please type a species"),
+  email: Yup.string().required("please type a size")
+});
+
+const formikObj = {
+  mapPropsToValues: myMapPropsToValues,
+  handleSubmit: myHandleSubmit,
+  validationSchema: yupSchema
+};
+
+const EnhancedFormHOC = withFormik(formikObj);
+const EnhancedUserForm = EnhancedFormHOC(UserForm);
+
+export default EnhancedUserForm;
